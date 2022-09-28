@@ -8360,10 +8360,12 @@
                     box-shadow: 0 1px 3px rgba(18,18,18,.1);
                     border: 1px solid #B9D5FF;
                 }
+                .ColumnHome{display: none;}
                 .ColumnHomeTop{
                     position: relative !important;
                     height: -webkit-fill-available !important;
                 }
+                .css-1ynzxqw,
                 .css-1hwwfws{display: none !important;}`;
             if (mode < 2) {
                 if (mode === 0) {

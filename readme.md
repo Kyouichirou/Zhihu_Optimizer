@@ -18,11 +18,7 @@ Tampermonkey版本: 4.x +
 
 *(建议使用尽可能高版本的chrome | chromium浏览器和Tampermonkey扩展)*
 
-安装地址: [Github](https://github.com/Kyouichirou/D7E1293/raw/main/Tmapermonkey/zhihu%20optimizer.user.js)
-
-安装地址: [Greasyfork](https://greasyfork.org/scripts/420005-zhihu-optimizer/code/zhihu%20optimizer.user.js)
-
-*(二选一即可)*
+安装地址: [Github](https://github.com/Kyouichirou/Zhihu_Optimizer/raw/main/zhihu_optimizer.user.js)
 
 推荐使用浏览器: [Centbrowser(百分浏览器)](https://www.centbrowser.cn/)
 

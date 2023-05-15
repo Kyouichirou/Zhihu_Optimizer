@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         zhihu optimizer
 // @namespace    https://github.com/Kyouichirou
-// @version      3.5.4.4
+// @version      3.5.4.5
 // @description  now, I can say this is the best GM script for zhihu!
 // @author       HLA
 // @run-at       document-start
@@ -10818,9 +10818,13 @@
                 }
             },
             nodeCount: 0,
+            is_math: false,
             getItem(node) {
                 // those tags will be ignored
                 const localName = node.localName;
+                const className = node.className;
+                this.is_math = (localName && localName.includes('math')) || (className && className.toLowerCase().includes('math'));
+                if (this.is_math) return;
                 const tags = [
                     "a",
                     "br",
@@ -10837,7 +10841,6 @@
                     this.nodeCount += 1;
                     return;
                 } else {
-                    const className = node.className;
                     if (className && className === "UserLink") {
                         this.arr.push(node.outerHTML);
                         this.nodeCount += 1;
@@ -10849,7 +10852,10 @@
                     text && this.textDetach(text);
                 } else {
                     // this is a trick, no traversal of textnode, maybe some nodes will lost content, take care
-                    for (const item of node.childNodes) this.getItem(item);
+                    for (const item of node.childNodes) {
+                        this.getItem(item);
+                        if (this.is_math) return;
+                    }
                     this.arr.length > 0 &&
                         node.childNodes.length - this.nodeCount <
                             this.nodeCount + 2 &&
@@ -11004,14 +11010,14 @@
                     this.blue = Math.ceil(Math.random() * 100) % 2 === 0;
                     !this.blue && (this.index = 255);
                     const tags = ["p", "ul", "li", "ol", "blockquote"];
-                    const textNode = [];
+                    const textNodes = [];
                     let i = -1;
                     for (const node of holder.childNodes) {
                         i++;
                         const type = node.nodeType;
                         //text node deal with separately
                         if (type === 3) {
-                            textNode.push(i);
+                            textNodes.push(i);
                             continue;
                         } else if (!tags.includes(node.tagName.toLowerCase())) {
                             //the continuity of content is interrupted, reset the color;
@@ -11023,13 +11029,15 @@
                             continue;
                         }
                         this.arr = [];
+                        this.is_math = false;
                         this.nodeCount = 0;
                         this.getItem(node);
+                        if (this.is_math) textNodes && textNodes.pop();
                     }
-                    i = textNode.length;
+                    i = textNodes.length;
                     if (i > 0) {
                         for (i; i--; ) {
-                            let node = holder.childNodes[textNode[i]];
+                            let node = holder.childNodes[textNodes[i]];
                             const text = node.nodeValue;
                             if (text) {
                                 this.arr = [];
@@ -11043,6 +11051,7 @@
                         }
                     }
                     this.arr = null;
+                    this.is_math = false;
                     code && this.rightClickCopyCode.main(holder);
                 } else {
                     const codes = holder.getElementsByClassName("highlight");
